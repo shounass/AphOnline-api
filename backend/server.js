@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 // Importar RUTAS
-// Asegúrate de que las rutas relativas sean correctas desde la raíz de /backend
 import pacientesRoutes from "./src/routes/pacientesRoutes.js";
 import usuariosRoutes from "./src/routes/usuariosRoutes.js";
 import medicosRoutes from "./src/routes/medicosRoutes.js";
@@ -16,12 +15,33 @@ import authRoutes from "./src/routes/authRoutes.js";
 
 // --- Configuración Inicial ---
 dotenv.config();
-const app = express(); // <-- DEFINIMOS APP AQUÍ ARRIBA
+const app = express();
 const PORT = process.env.PORT || 4000;
 
 // --- Configuración de CORS ---
-// (Ahora sí, después de definir 'app')
+// (Aquí está la magia, mi amor)
+const allowedOrigins = [
+  "http://localhost:3000", // Para tu PC
+  "http://localhost:5173", // Para tu PC (si usas Vite)
+  "https://aphonline-frontend.onrender.com", // La que teníamos antes (por si acaso)
+  "https://aphonline-api-frontend.onrender.com", // <-- ¡LA BUENA! La de tu captura
+];
 
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Permitir apps sin origen (como Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = "La política CORS no permite el acceso desde este origen.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 
 // --- Conexión a MongoDB ---
 mongoose
@@ -30,12 +50,11 @@ mongoose
   .catch((error) => console.error("❌ Error al conectar a MongoDB:", error));
 
 // --- Middlewares ---
-// app.use(cors()); // <-- ¡ELIMINAMOS ESTA LÍNEA REPETIDA!
+// (Solo estos dos, ya CORS está configurado arriba)
 app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true })); // Permite a Express leer JSON del body
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // --- Definición de Rutas de la API ---
-// "Cuando alguien vaya a /api/pacientes, usa el archivo pacientesRoutes"
 app.use("/api/auth", authRoutes);
 app.use("/api/pacientes", pacientesRoutes);
 app.use("/api/usuarios", usuariosRoutes);
@@ -47,7 +66,7 @@ app.use("/api/examenes", examenRoutes);
 
 // Ruta raíz de prueba
 app.get("/", (req, res) => {
-  res.send("🩺 API de Aphonline funcionando.");
+  res.send("🩺 API de Aphonline funcionando (CORS Corregido).");
 });
 
 // --- Iniciar Servidor ---
