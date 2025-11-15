@@ -21,28 +21,7 @@ const PORT = process.env.PORT || 4000;
 
 // --- Configuración de CORS ---
 // (Ahora sí, después de definir 'app')
-const allowedOrigins = [
-  "http://localhost:3000", // Para cuando trabajas en tu PC
-  "http://localhost:5173", // (Opcional) Por si usas Vite a veces
-  "https://aphonline-api-frontend.onrender.com", // <-- TU URL DE RENDER
-  // Añade aquí la URL de tu frontend si la personalizaste (ej: aphonline-salud.onrender.com)
-];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Permitir solicitudes sin origen (como Postman o Apps móviles)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = "La política CORS no permite el acceso desde este origen.";
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-    credentials: true, // Importante para las cookies o headers de autorización
-  })
-);
 
 // --- Conexión a MongoDB ---
 mongoose
