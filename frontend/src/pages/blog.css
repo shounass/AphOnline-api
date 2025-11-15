@@ -1,0 +1,124 @@
+/* --- Hero Section --- */
+.blog-hero {
+  background-color: var(--color-logo-dark); /* Color oscuro del logo */
+  color: white;
+  padding: 80px 30px;
+  text-align: center;
+}
+
+.blog-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.blog-hero h1 {
+  font-size: 3rem;
+  color: white;
+}
+
+.blog-hero p {
+  font-size: 1.3rem;
+  color: #e0e0e0;
+  font-family: var(--font-body);
+  margin-top: 15px;
+}
+
+/* --- Contenido y Grid --- */
+.blog-content {
+  padding: 80px 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.blog-grid {
+  display: grid;
+  /* Crea columnas responsive: 
+     - En pantallas grandes, 3 columnas (1fr 1fr 1fr)
+     - En medianas, 2 columnas
+     - En pequeñas, 1 columna
+  */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+/* --- Tarjeta de Post --- */
+.post-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden; /* Para que la imagen respete el borde redondeado */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* --- Imagen del Post --- */
+.post-image-container {
+  position: relative;
+  width: 100%;
+  height: 220px;
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Rellena el espacio sin deformarse */
+}
+
+.post-category {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: var(--color-logo-mint); /* Color menta del logo */
+  color: var(--color-logo-dark);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* --- Contenido del Post --- */
+.post-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Para que el 'Leer Más' se alinee abajo */
+}
+
+.post-title {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: var(--color-logo-dark);
+}
+
+.post-excerpt {
+  font-family: var(--font-body);
+  color: var(--color-logo-text-alt);
+  font-size: 0.95rem;
+  flex-grow: 1; /* Empuja el 'meta' y 'leer más' hacia abajo */
+}
+
+.post-meta {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-read-more {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.post-read-more:hover {
+  text-decoration: underline;
+}

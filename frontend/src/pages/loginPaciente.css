@@ -1,0 +1,109 @@
+/* Contenedor que centra el formulario en la página */
+.login-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 80vh; /* Altura para centrar verticalmente */
+  background-color: #f4f7f6; /* Un fondo suave */
+}
+
+/* La tarjeta/contenedor del formulario */
+.login-container {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  max-width: 450px;
+  width: 100%;
+  box-sizing: border-box; /* Importante para el padding */
+}
+
+.login-container h2 {
+  text-align: center;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+/* El formulario en sí */
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Grupo de Label + Input */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box; /* Para que el padding no rompa el ancho */
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Efecto visual al hacer clic en el input */
+.form-group input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0,123,255,0.25);
+  outline: none; /* Quita el borde azul feo de Chrome */
+}
+
+/* Botón de Submit */
+.login-button {
+  padding: 15px;
+  background: #007bff; /* Azul primario */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.login-button:hover {
+  background: #0056b3; /* Azul más oscuro */
+}
+
+/* Mensaje de error (¡la mejora!) */
+.error-message {
+  background-color: #f8d7da; /* Rojo pálido */
+  color: #721c24; /* Rojo oscuro */
+  border: 1px solid #f5c6cb;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Link para ir a Registrarse */
+.register-link {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: #555;
+}
+
+.register-link a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}

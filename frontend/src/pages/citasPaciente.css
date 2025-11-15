@@ -1,0 +1,125 @@
+/* Wrapper General */
+.citas-page-wrapper {
+  background-color: var(--color-logo-mint-light);
+  min-height: 90vh;
+  padding: 40px 20px;
+}
+
+.citas-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.citas-header {
+  background: var(--color-logo-dark);
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.citas-header h1 { margin: 0; font-size: 2rem; color: white; }
+.citas-header p { color: #a7d9d0; margin-top: 5px; }
+
+/* --- PESTAÑAS --- */
+.tabs-header {
+  display: flex;
+  border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 20px;
+  border: none;
+  background: #f9f9f9;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  background: white;
+  color: var(--color-primary);
+  border-bottom: 3px solid var(--color-primary);
+}
+
+.tab-btn:hover:not(.active) {
+  background: #eee;
+}
+
+.tab-content {
+  padding: 30px;
+}
+
+/* --- TARJETAS DE CITAS --- */
+.citas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.cita-card {
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.fecha-badge { font-weight: bold; color: var(--color-logo-dark); }
+.hora-badge { color: var(--color-primary); }
+
+.card-body h4 { margin: 0; color: #333; }
+.card-body .esp { color: #777; font-size: 0.9rem; margin-bottom: 5px; }
+.card-body .motivo { font-style: italic; background: #f4f4f4; padding: 5px; font-size: 0.85rem; }
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-edit, .btn-cancel {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-edit { background: #e2e6ea; color: #333; }
+.btn-cancel { background: #f8d7da; color: #721c24; }
+
+/* --- FORMULARIO AGENDAR --- */
+.form-agendar { max-width: 600px; margin: 0 auto; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: bold; margin-bottom: 8px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+}
+.btn-submit { width: 100%; padding: 15px; background: var(--color-primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
+
+/* --- TABLA --- */
+.historial-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.historial-table th, .historial-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+.badge.cancelada { color: red; background: #ffe6e6; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; }
+.badge.completada { color: green; background: #e6fffa; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; }
+
+/* --- MODAL --- */
+.modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; }
+.modal-box { background:white; padding:30px; border-radius:10px; width:300px; }
+.modal-btns { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
+.btn-save { background:var(--color-primary); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; }

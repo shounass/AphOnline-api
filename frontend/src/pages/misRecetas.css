@@ -1,0 +1,103 @@
+.recetas-wrapper {
+  background-color: var(--color-logo-mint-light);
+  min-height: 90vh;
+  padding: 40px 20px;
+}
+
+.recetas-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.recetas-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.recetas-header h1 { color: var(--color-logo-dark); margin: 0; }
+.recetas-header p { color: #666; margin-top: 5px; }
+
+/* Grid de Tarjetas */
+.recetas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.receta-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-top: 5px solid var(--color-logo-mint);
+  transition: transform 0.2s;
+}
+
+.receta-card:hover { transform: translateY(-3px); }
+
+/* Estilo para recetas vencidas */
+.receta-card.vencida {
+  border-top-color: #ccc;
+  opacity: 0.8;
+}
+
+.receta-top {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fcfcfc;
+}
+
+.receta-fecha small { display: block; color: #888; font-size: 0.8rem; }
+.receta-fecha span { font-weight: bold; color: #333; font-size: 0.9rem; }
+
+.badge-estado { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+.badge-estado.activa { background: #d4edda; color: #155724; }
+.badge-estado.vencida { background: #f8d7da; color: #721c24; }
+
+.receta-medico { padding: 0 20px; margin-top: 15px; }
+.receta-medico h4 { margin: 0; color: var(--color-primary); font-size: 1.1rem; }
+.receta-medico span { font-size: 0.9rem; color: #777; }
+
+.divider { border: 0; border-top: 1px solid #eee; margin: 15px 20px; }
+
+.medicamentos-list { padding: 0 20px; flex-grow: 1; }
+.medicamentos-list h5 { margin: 0 0 10px 0; color: var(--color-logo-dark); }
+
+.med-item {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+.med-item strong { color: #333; display: block; margin-bottom: 3px; }
+.med-item p { margin: 0; color: #555; }
+.indicaciones { font-style: italic; margin-top: 5px !important; color: #777 !important; font-size: 0.85rem !important; }
+
+.receta-footer {
+  padding: 20px;
+  background: #fcfcfc;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vence { color: #999; font-size: 0.8rem; }
+
+.btn-pdf {
+  background-color: var(--color-logo-dark);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-pdf:hover { background-color: #1a252f; }
+
+.text-center { text-align: center; width: 100%; color: #666; margin-top: 50px; }

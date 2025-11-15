@@ -1,0 +1,111 @@
+/* --- Encabezado --- */
+.pqrs-hero {
+  background-color: var(--color-logo-mint-light); /* Fondo menta claro */
+  padding: 60px 30px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.pqrs-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.pqrs-hero h1 {
+  font-size: 3rem;
+  color: var(--color-logo-dark);
+}
+
+.pqrs-hero p {
+  font-size: 1.2rem;
+  color: var(--color-logo-text-alt);
+  font-family: var(--font-body);
+  margin-top: 15px;
+}
+
+/* --- Contenedor del Formulario --- */
+.pqrs-form-container {
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+  background-color: #fefefe;
+}
+
+/* --- Formulario --- */
+.pqrs-form {
+  max-width: 600px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.pqrs-form h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+/* Estilos de los campos del formulario */
+.pqrs-form .form-group {
+  margin-bottom: 20px;
+}
+
+.pqrs-form .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-logo-dark);
+}
+
+.pqrs-form .form-group input,
+.pqrs-form .form-group select,
+.pqrs-form .form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.pqrs-form .form-group input:focus,
+.pqrs-form .form-group select:focus,
+.pqrs-form .form-group textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 8px rgba(0,123,255,0.25);
+  outline: none;
+}
+
+.pqrs-form .form-group textarea {
+  resize: vertical; /* Permite al usuario ajustar la altura */
+}
+
+.pqrs-submit-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.1rem;
+}
+
+/* --- Mensaje de Éxito --- */
+.pqrs-success-message {
+  max-width: 600px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  border: 2px solid var(--color-logo-mint);
+}
+
+.pqrs-success-message h3 {
+  font-size: 1.8rem;
+  color: var(--color-primary);
+  margin-top: 0;
+}

@@ -1,0 +1,97 @@
+.historia-wrapper {
+  background-color: var(--color-logo-mint-light);
+  min-height: 90vh;
+  padding: 40px 20px;
+}
+
+.historia-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.historia-header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: var(--color-logo-dark);
+}
+
+.historia-header h1 { margin: 0; font-size: 2.5rem; }
+.historia-header p { color: #666; margin-top: 5px; }
+
+/* GRID LAYOUT */
+.historia-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.historia-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-top: 4px solid var(--color-logo-mint);
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.historia-card h3 {
+  margin-top: 0;
+  color: var(--color-primary);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.lista-medica {
+  list-style: none;
+  padding: 0;
+}
+
+.lista-medica li {
+  background: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border-left: 3px solid var(--color-logo-dark);
+  color: #333;
+}
+
+.texto-antecedentes {
+  line-height: 1.6;
+  color: #555;
+}
+
+.text-muted {
+  color: #999;
+  font-style: italic;
+}
+
+/* TABLA */
+.tabla-historia {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.tabla-historia th, .tabla-historia td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.tabla-historia th {
+  background-color: #f4f4f4;
+  color: var(--color-logo-dark);
+  font-weight: 600;
+}
+
+.loading-msg, .error-msg {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+  color: #666;
+}

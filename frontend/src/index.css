@@ -1,0 +1,101 @@
+/* Importa Google Fonts para una tipografía moderna */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+
+/* Define variables CSS para tus colores */
+:root {
+  --color-primary: #007bff; /* Azul base (lo mantendremos para botones) */
+  --color-secondary: #28a745; /* Verde para éxito */
+  --color-danger: #dc3545; /* Rojo para errores */
+
+  /* Colores inspirados en tu logo */
+  --color-logo-mint-light: #e0f2f1; /* Verde menta muy claro para fondos */
+  --color-logo-mint: #a7d9d0;    /* Verde menta para acentos suaves */
+  --color-logo-dark: #2c3e50;    /* Azul oscuro para texto y elementos */
+  --color-logo-text-alt: #4a6d7c; /* Un gris azulado para texto secundario */
+
+  /* Tipografías */
+  --font-heading: 'Playfair Display', serif; /* Para títulos más elegantes */
+  --font-body: 'Montserrat', sans-serif;   /* Para texto general, moderno */
+}
+
+/* Estilos globales */
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-logo-mint-light); /* Fondo general de la app */
+  color: var(--color-logo-dark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-logo-dark);
+  margin-bottom: 1rem;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* Limpiar estilos de lista */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Estilos de enlaces por defecto */
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-primary); /* Podrías cambiarlo a un verde menta más oscuro si quieres */
+}
+
+/* Estilos para botones genéricos (puedes ajustar los colores) */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px; /* Más suave */
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none; /* Para que Link se vea como botón */
+  display: inline-block; /* Para Link */
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: var(--color-primary); /* Mantenemos el azul para la acción principal */
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-logo-dark); /* Color oscuro del logo */
+  border: 1px solid var(--color-logo-dark);
+}
+.btn-outline:hover {
+  background-color: var(--color-logo-dark);
+  color: white;
+  box-shadow: 0 4px 10px rgba(44, 62, 80, 0.2);
+}
+
+.btn-secondary-mint { /* Nuevo botón con color de tu logo */
+  background-color: var(--color-logo-mint);
+  color: var(--color-logo-dark);
+  border: 1px solid var(--color-logo-mint);
+}
+.btn-secondary-mint:hover {
+  background-color: #8cc3b8; /* Un poco más oscuro */
+  color: white;
+}

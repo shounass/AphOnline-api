@@ -1,0 +1,139 @@
+/* --- Estilos Generales de la Página --- */
+.about-page {
+  background-color: #ffffff;
+}
+
+/* --- Hero Section --- */
+.about-hero {
+  background-color: var(--color-logo-mint-light); /* Verde menta claro de fondo */
+  padding: 80px 30px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.about-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-hero h1 {
+  font-size: 3rem;
+  color: var(--color-logo-dark);
+}
+
+.about-hero .subtitle {
+  font-size: 1.3rem;
+  color: var(--color-logo-text-alt);
+  font-family: var(--font-body); /* Usar fuente de cuerpo */
+  margin-top: 15px;
+}
+
+/* --- Misión y Visión --- */
+.mission-vision {
+  padding: 80px 30px;
+  background-color: #fefefe;
+}
+
+.mission-vision-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap; /* Para responsividad */
+}
+
+.mission-card, .vision-card {
+  flex: 1;
+  min-width: 300px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid var(--color-logo-mint); /* Acento de color */
+}
+
+.mission-card h2, .vision-card h2 {
+  font-size: 2rem;
+  color: var(--color-primary); /* Azul para destacar */
+}
+
+.mission-card p, .vision-card p {
+  font-family: var(--font-body);
+  color: var(--color-logo-text-alt);
+}
+
+/* --- Sección de Valores --- */
+.values-section {
+  padding: 80px 30px;
+  background-color: var(--color-logo-mint-light); /* Fondo menta claro */
+  text-align: center;
+}
+
+.values-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.value-item {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.value-icon {
+  font-size: 3rem;
+}
+
+.value-item h3 {
+  font-size: 1.6rem;
+  margin-top: 15px;
+}
+
+/* --- Sección del Equipo --- */
+.team-section {
+  padding: 80px 30px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.team-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.team-section p {
+  font-size: 1.2rem;
+  color: var(--color-logo-text-alt);
+  font-family: var(--font-body);
+}
+
+/* --- Sección CTA Final --- */
+.about-cta {
+  background-color: var(--color-logo-dark); /* Color oscuro del logo */
+  color: white;
+  padding: 80px 30px;
+  text-align: center;
+}
+
+.about-cta h2 {
+  font-size: 2.8rem;
+  color: white;
+}
+
+.about-cta p {
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  margin-bottom: 30px;
+  font-family: var(--font-body);
+}
