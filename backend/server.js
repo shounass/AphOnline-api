@@ -15,6 +15,29 @@ import examenRoutes from "./src/routes/examenRoutes.js";
 import authRoutes from "./src/routes/authRoutes.js";
 // (Añade aquí las otras rutas de tu README: medicos, citas, etc.)
 
+const cors = require('cors');
+
+// Lista de sitios permitidos (Whitelist)
+const allowedOrigins = [
+  "http://localhost:3000",                         // Para cuando trabajas en tu PC
+  "http://localhost:5173",                         // (Opcional) Por si usas Vite a veces
+  "https://aphonline-api-frontend.onrender.com"        // <--- ¡AQUÍ PEGAS TU URL DE RENDER!
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Permitir solicitudes sin origen (como Postman o Apps móviles)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'La política CORS no permite el acceso desde este origen.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true // Importante para las cookies o headers de autorización
+}));
+
 // --- Configuración ---
 dotenv.config();
 const app = express();
