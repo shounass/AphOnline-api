@@ -1,0 +1,43 @@
+.notificacion-wrapper { position: relative; margin-right: 20px; cursor: pointer; }
+
+.campana-icon { 
+  font-size: 1.5rem; 
+  position: relative; 
+  transition: transform 0.2s;
+}
+.campana-icon:hover { transform: scale(1.1); }
+
+.badge-count { position: absolute; top: -5px; right: -5px; background-color: #e74c3c; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; border: 2px solid white; }
+
+.dropdown-notificaciones { 
+  position: absolute; top: 140%; right: -10px; width: 300px; background: white; 
+  border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); z-index: 1000; border: 1px solid #eee; 
+}
+
+.dropdown-notificaciones h4 { margin: 0; padding: 15px; background: #f8f9fa; border-bottom: 1px solid #eee; font-size: 0.95rem; color: #333; }
+
+.no-notif { padding: 20px; text-align: center; color: #999; font-size: 0.85rem; font-style: italic; }
+
+.dropdown-notificaciones ul { list-style: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; }
+
+/* --- ÍTEM CLICABLE --- */
+.notif-item { 
+  padding: 15px; 
+  border-bottom: 1px solid #f0f0f0; 
+  font-size: 0.9rem; 
+  color: #555; 
+  cursor: pointer; /* Manito */
+  transition: background 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.notif-item:hover { background-color: #f0f8ff; } /* Azulito claro al pasar el mouse */
+
+.click-hint {
+  font-size: 0.75rem;
+  color: #3498db;
+  font-weight: bold;
+  text-align: right;
+}
