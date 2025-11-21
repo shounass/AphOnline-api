@@ -2,10 +2,7 @@ import mongoose from "mongoose";
 
 const medicoSchema = new mongoose.Schema(
   {
-    // --- NUEVO CAMPO UNIFICADOR ---
-    documento: { type: String, required: true, unique: true }, 
-    // ------------------------------
-    
+    documento: { type: String, required: true, unique: true },
     nombre: { type: String, required: true },
     apellido: { type: String, required: true },
     especialidad: { type: String, required: true },
@@ -13,11 +10,15 @@ const medicoSchema = new mongoose.Schema(
     telefono: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    
-    rol: { type: String, default: "medico" }, // El rol define a dónde va
-    
+    rol: { type: String, default: "medico" },
     consultorio: { type: String },
     horarioAtencion: { type: String, default: "8:00 AM - 5:00 PM" },
+    
+    // --- NUEVO: DÍAS LABORALES ---
+    // 0=Domingo, 1=Lunes, ... 6=Sábado
+    // Por defecto: Lunes a Viernes (1,2,3,4,5)
+    diasLaborales: { type: [Number], default: [1, 2, 3, 4, 5] },
+    
     estado: { type: Boolean, default: true },
     foto: { type: String, default: "" }
   },

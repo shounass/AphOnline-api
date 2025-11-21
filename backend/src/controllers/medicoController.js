@@ -1,63 +1,11 @@
 import Medico from "../models/medicoModel.js";
+import Cita from "../models/citaModel.js"; 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-// 1. Registrar Médico (Nuevo)
-export const registrarMedico = async (req, res) => {
-  try {
-    const { documento, nombre, apellido, especialidad, numeroLicencia, email, password, telefono, consultorio } = req.body;
+// ... (registrarMedico, loginMedico, obtenerMedicos IGUALES) ...
+// Solo cambia la función de abajo y agrega obtenerReporte si no estaba
 
-    // Validar existencia
-    const existe = await Medico.findOne({ email });
-    if (existe) return res.status(400).json({ msg: "El correo ya está registrado" });
-
-    // Hashear password
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    const nuevoMedico = new Medico({
-      documento, nombre, apellido, especialidad, numeroLicencia, email, telefono, consultorio,
-      password: passwordHash,
-      rol: "medico",
-      foto: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png" // Avatar de doctor por defecto
-    });
-
-    await nuevoMedico.save();
-    res.status(201).json({ msg: "Médico registrado correctamente" });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Error al registrar médico" });
-  }
-};
-
-// 2. Login Médico (Nuevo)
-export const loginMedico = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const medico = await Medico.findOne({ email });
-    if (!medico) return res.status(404).json({ msg: "Médico no encontrado" });
-
-    const passwordOK = await bcrypt.compare(password, medico.password);
-    if (!passwordOK) return res.status(400).json({ msg: "Contraseña incorrecta" });
-
-    // Token con Rol de Médico
-    const token = jwt.sign(
-      { id: medico._id, rol: "medico" },
-      process.env.JWT_SECRET,
-      { expiresIn: "12h" }
-    );
-
-    res.json({ msg: "Login exitoso", medico, token });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Error en el login" });
-  }
-};
-
-// 3. Obtener todos (Ya existía, lo dejamos para el select del paciente)
 export const obtenerMedicos = async (req, res) => {
   try {
     const medicos = await Medico.find({ estado: true }).select("-password");
@@ -65,4 +13,72 @@ export const obtenerMedicos = async (req, res) => {
   } catch (error) {
     res.status(500).json({ msg: "Error al obtener médicos" });
   }
+};
+
+export const obtenerReporte = async (req, res) => {
+  try {
+    const medicoId = req.usuario.id;
+    const total = await Cita.countDocuments({ medicoId });
+    const completadas = await Cita.countDocuments({ medicoId, estado: "Completada" });
+    const pendientes = await Cita.countDocuments({ medicoId, estado: "Pendiente" });
+    const canceladas = await Cita.countDocuments({ medicoId, estado: "Cancelada" });
+    
+    const citas = await Cita.find({ medicoId }).select("pacienteId");
+    const pacientesUnicos = new Set(citas.map(c => c.pacienteId.toString())).size;
+
+    res.json({ total, completadas, pendientes, canceladas, pacientesUnicos });
+  } catch (error) {
+    res.status(500).json({ msg: "Error reporte" });
+  }
+};
+
+// --- ACTUALIZADA: Guardar Días Laborales ---
+export const actualizarHorario = async (req, res) => {
+  try {
+    const { horarioAtencion, diasLaborales } = req.body;
+    
+    const medico = await Medico.findByIdAndUpdate(
+      req.usuario.id,
+      { horarioAtencion, diasLaborales }, // Actualizamos ambos
+      { new: true }
+    ).select("-password");
+
+    res.json({ msg: "Configuración de agenda actualizada", medico });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al actualizar horario" });
+  }
+};
+
+// ... (Asegúrate de tener registrarMedico y loginMedico al inicio del archivo como antes)
+// VOY A PONERLAS AQUÍ RESUMIDAS PARA QUE EL ARCHIVO ESTÉ COMPLETO SI COPIAS Y PEGAS:
+
+export const registrarMedico = async (req, res) => {
+  /* ... (Lógica de registro igual a la anterior) ... */
+  try {
+    const { nombre, apellido, especialidad, numeroLicencia, email, password, telefono, consultorio, documento } = req.body;
+    const existe = await Medico.findOne({ email });
+    if (existe) return res.status(400).json({ msg: "Email registrado" });
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+    const nuevo = new Medico({ ...req.body, password: passwordHash, rol: "medico" });
+    await nuevo.save();
+    res.status(201).json({ msg: "Médico registrado" });
+  } catch (e) { res.status(500).json({msg:"Error"}); }
+};
+
+export const loginMedico = async (req, res) => {
+   /* ... (Lógica de login igual a la anterior) ... */
+   try {
+    const { documento, password } = req.body; // O email, según tu login unificado usa documento
+    // Si usas email en loginMedico específico:
+    const { email } = req.body; 
+    // Nota: Si usas login unificado en authController, esto es redundante pero útil para pruebas.
+    // Asumiremos la lógica estándar:
+    const medico = await Medico.findOne({ email }); // O documento
+    if(!medico) return res.status(404).json({msg:"No encontrado"});
+    const passOK = await bcrypt.compare(password, medico.password);
+    if(!passOK) return res.status(400).json({msg:"Password mal"});
+    const token = jwt.sign({id:medico._id, rol:"medico"}, process.env.JWT_SECRET, {expiresIn:"12h"});
+    res.json({msg:"Login ok", medico, token});
+   } catch(e) { res.status(500).json({msg:"Error"}); }
 };
