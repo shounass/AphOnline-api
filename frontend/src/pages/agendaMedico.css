@@ -9,18 +9,18 @@
   margin-bottom: 30px;
 }
 .agenda-header h1 { color: #2c3e50; margin: 0; }
-.agenda-header p { color: #3498db; font-weight: bold; }
+.agenda-header p { color: #3498db; font-weight: bold; margin-top: 5px; }
 
 /* --- GRID LAYOUT --- */
 .agenda-grid-layout {
   display: grid;
-  grid-template-columns: 350px 1fr; /* Calendario fijo, lista flexible */
+  grid-template-columns: 350px 1fr;
   gap: 30px;
   max-width: 1100px;
   margin: 0 auto;
 }
 
-/* --- CALENDARIO (Personalización de React-Calendar) --- */
+/* --- CALENDARIO --- */
 .calendar-card {
   background: white;
   padding: 20px;
@@ -28,13 +28,12 @@
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
+/* Overrides para react-calendar */
 .react-calendar { 
   border: none !important; 
-  font-family: var(--font-body) !important;
+  font-family: inherit !important;
   width: 100% !important;
 }
-
-/* Encabezado del calendario */
 .react-calendar__navigation button {
   color: #2c3e50;
   min-width: 44px;
@@ -42,30 +41,22 @@
   font-size: 1.1rem;
   font-weight: bold;
 }
-
-/* Días de la semana */
 .react-calendar__month-view__weekdays {
   text-transform: uppercase;
   font-size: 0.75rem;
   font-weight: bold;
   color: #3498db;
 }
-
-/* Día seleccionado */
 .react-calendar__tile--active {
   background: #3498db !important;
   color: white !important;
   border-radius: 8px;
 }
-
-/* Día actual */
 .react-calendar__tile--now {
   background: #eaf2f8;
   border-radius: 8px;
   color: #2c3e50;
 }
-
-/* Puntito rojo para citas */
 .dot-indicator {
   height: 6px;
   width: 6px;
@@ -73,19 +64,11 @@
   border-radius: 50%;
   margin: 2px auto 0;
 }
-
 .calendar-legend {
   margin-top: 10px;
   text-align: center;
   font-size: 0.85rem;
   color: #666;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-.dot-legend {
-  height: 8px; width: 8px; background: #e74c3c; border-radius: 50%; display: inline-block;
 }
 
 /* --- LISTA DE CITAS --- */
@@ -131,6 +114,10 @@
 }
 .cita-medico-card:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
 
+.cita-medico-card.pendiente { border-left-color: #f1c40f; }
+.cita-medico-card.confirmada { border-left-color: #27ae60; }
+.cita-medico-card.propuesta { border-left-color: #9b59b6; }
+
 .cita-time {
   text-align: center;
   padding-right: 20px;
@@ -153,23 +140,74 @@
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: bold;
+  text-transform: uppercase;
 }
-.modalidad-badge.virtual { background: #e8eaf6; color: #3f51b5; }
 
-.btn-atender {
-  background-color: #27ae60;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 0.9rem;
+.cita-actions {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  min-width: 100px;
 }
-.btn-atender:hover { background-color: #219150; }
 
-/* Responsividad */
+/* Botones */
+.btn-confirmar { background: #27ae60; color: white; border: none; padding: 6px; border-radius: 4px; cursor: pointer; }
+.btn-proponer { background: #f39c12; color: white; border: none; padding: 6px; border-radius: 4px; cursor: pointer; }
+.btn-atender { background: #3498db; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+.btn-ver-paciente { background: #95a5a6; color: white; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 5px; }
+
+/* --- MODAL --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border-top: 5px solid #3498db;
+  animation: slideDown 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content h3 { margin-top: 0; color: #2c3e50; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.modal-content p { color: #555; margin-bottom: 10px; }
+
+.modal-content .form-group { margin-bottom: 15px; }
+.modal-content label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
+.modal-content input, .modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-cancel { background: #ecf0f1; color: #333; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+.btn-save { background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+@keyframes slideDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: translateY(0); } }
+
 @media (max-width: 850px) {
   .agenda-grid-layout { grid-template-columns: 1fr; }
-  .calendar-section { max-width: 400px; margin: 0 auto; }
 }
