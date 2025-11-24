@@ -1,11 +1,22 @@
 import express from "express";
-import { obtenerMedicos, registrarMedico, loginMedico } from "../controllers/medicoController.js";
+import { 
+  obtenerMedicos, 
+  registrarMedico, 
+  loginMedico,
+  obtenerReporte,    // <-- Nuevo
+  actualizarHorario  // <-- Nuevo
+} from "../controllers/medicoController.js";
+import auth from "../../middleware/auth.js"; // <-- Importante
 
 const router = express.Router();
 
 // Rutas Públicas
-router.get("/", obtenerMedicos); // Para que los pacientes vean la lista
-router.post("/registro", registrarMedico); // Para crear doctores (Idealmente sería admin, pero lo usaremos para crear tu cuenta)
-router.post("/login", loginMedico); // Para entrar al dash
+router.get("/", obtenerMedicos);
+router.post("/registro", registrarMedico);
+router.post("/login", loginMedico);
+
+// Rutas Privadas (Solo Médico Logueado)
+router.get("/reporte", auth, obtenerReporte);     // Para los gráficos/datos
+router.put("/horario", auth, actualizarHorario);  // Para cambiar el texto del horario
 
 export default router;

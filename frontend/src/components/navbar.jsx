@@ -22,13 +22,13 @@ const Navbar = () => {
   const getHomeLink = () => {
     if (!usuario) return "/";
     if (usuario.rol === "medico") return "/dashboard-medico";
+    if (usuario.rol === "admin") return "/dashboard-admin"; // <-- NUEVO: Admin va a su trono
     return "/dashboard-paciente";
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {/* --- LOGO --- */}
         <Link
           to={getHomeLink()}
           className="navbar-logo"
@@ -37,14 +37,12 @@ const Navbar = () => {
           APHONLINE
         </Link>
 
-        {/* --- HAMBURGUESA (Móvil) --- */}
         <div className="menu-icon" onClick={handleClick}>
           <span className={click ? "fas fa-times" : "fas fa-bars"}>
             {click ? "✕" : "☰"}
           </span>
         </div>
 
-        {/* --- MENÚ PRINCIPAL --- */}
         <div
           className={click ? "nav-menu-container active" : "nav-menu-container"}
         >
@@ -113,6 +111,34 @@ const Navbar = () => {
                 </Link>
               </div>
             </>
+          ) : usuario.rol === "admin" ? (
+            // 🟣 MENÚ DE ADMINISTRADOR (¡NUEVO!)
+            <>
+              <ul className="nav-menu">
+                <li className="nav-item">
+                  <Link
+                    to="/dashboard-admin"
+                    className="nav-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Panel de Control
+                  </Link>
+                </li>
+                {/* Como el admin maneja todo desde el dashboard con pestañas, no necesitamos más links aquí por ahora */}
+              </ul>
+
+              <div className="nav-auth">
+                <span className="nav-welcome" style={{ color: "#9b59b6" }}>
+                  👑 {usuario.nombre}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-outline-mobile"
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
+            </>
           ) : usuario.rol === "medico" ? (
             // 🔵 MENÚ DE MÉDICO
             <>
@@ -158,7 +184,7 @@ const Navbar = () => {
               </div>
             </>
           ) : (
-            // 🟠 MENÚ DE PACIENTE (Aquí estaban los perdidos)
+            // 🟠 MENÚ DE PACIENTE
             <>
               <ul className="nav-menu">
                 <li className="nav-item">
@@ -221,7 +247,7 @@ const Navbar = () => {
                   onClick={handleLogout}
                   className="btn btn-outline-mobile"
                 >
-                  Cerrar Sesión
+                  Salir
                 </button>
               </div>
             </>

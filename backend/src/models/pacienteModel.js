@@ -21,38 +21,39 @@ const pacienteSchema = new mongoose.Schema(
     nombre: { type: String, required: true, trim: true },
     apellido: { type: String, required: true, trim: true },
     
-    // --- CAMPOS NUEVOS Y ACTUALIZADOS ---
     fechaNacimiento: { type: Date, required: true },
-    sexo: { 
-      type: String, 
-      required: true, 
-      enum: ["Masculino", "Femenino", "Otro"] 
-    },
+    sexo: { type: String, required: true, enum: ["Masculino", "Femenino", "Otro"] },
     eps: { type: String, required: true },
-    estrato: { type: Number, required: true, min: 1, max: 6 },
+    estrato: { type: Number, required: true },
     ciudad: { type: String, required: true },
-    estadoCivil: { 
-      type: String, 
-      enum: ["Soltero", "Casado", "Union Libre", "Viudo", "Divorciado"],
-      default: "Soltero"
-    },
+    estadoCivil: { type: String, default: "Soltero" },
     ocupacion: { type: String, default: "Hogar" },
     telefono: { type: String, required: true },
-    email: { type: String, trim: true, lowercase: true },
+    
+    // Email simple (sin regex complicada en BD si prefieres, o déjala si funciona bien)
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      required: true
+    },
+    
     direccion: { type: String, required: true },
     rh: { type: String, required: true },
     
-    // --- PERFIL ---
     foto: { type: String, default: "" },
     biografia: { type: String, default: "" },
     
-    // --- MÉDICOS ---
     enfermedades: { type: [String], default: [] },
     alergias: { type: [String], default: [] },
     tratamientos: { type: [String], default: [] },
     
     rol: { type: String, default: "paciente" },
-    estado: { type: Boolean, default: true }
+    estado: { type: Boolean, default: true },
+
+    // --- CAMBIO: CONFIRMADO POR DEFECTO TRUE ---
+    confirmado: { type: Boolean, default: true }, 
+    tokenConfirmacion: { type: String, default: "" }
   },
   { timestamps: true }
 );
@@ -61,6 +62,7 @@ pacienteSchema.methods.toJSON = function () {
   const paciente = this.toObject();
   delete paciente.password;
   delete paciente.__v;
+  delete paciente.tokenConfirmacion;
   return paciente;
 };
 

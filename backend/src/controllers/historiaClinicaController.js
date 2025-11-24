@@ -1,49 +1,96 @@
 import HistoriaClinica from "../models/historiaClinicaModel.js";
+import Paciente from "../models/pacienteModel.js";
+import Medico from "../models/medicoModel.js"; // <-- 1. IMPORTANTE: Importar el modelo Médico
 
-// 1. Ver la historia del paciente logueado
+// 1. Ver mi historia (Paciente)
 export const verMiHistoria = async (req, res) => {
   try {
-    // Buscamos por el pacienteId que viene del token
     const historia = await HistoriaClinica.findOne({ pacienteId: req.usuario.id })
       .populate({
-        path: 'historiaCitas',     // Llenamos los datos de las citas
-        populate: { path: 'medicoId', select: 'nombre apellido especialidad' } // Y dentro de las citas, los datos del médico
+        path: 'historiaCitas',
+        populate: { path: 'medicoId', select: 'nombre apellido' }
       });
+    if (!historia) return res.status(404).json({ msg: "Historia no encontrada" });
+    res.json(historia);
+  } catch (error) { res.status(500).json({ msg: "Error del servidor" }); }
+};
+
+// 2. Ver historia por ID de Paciente (Médico)
+export const verHistoriaPorPacienteId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let historia = await HistoriaClinica.findOne({ pacienteId: id });
 
     if (!historia) {
-      return res.status(404).json({ msg: "No se encontró historia clínica para este paciente." });
+      // Si no existe, la creamos vacía para que no rompa el frontend
+      historia = new HistoriaClinica({ pacienteId: id });
+      await historia.save();
     }
 
     res.json(historia);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: "Error al obtener la historia clínica" });
+    res.status(500).json({ msg: "Error al obtener historia" });
   }
 };
 
-// 2. Crear/Inicializar historia (Para pruebas con Postman)
+// 3. Crear Historia (Admin/Postman)
 export const crearHistoria = async (req, res) => {
   try {
-    const { pacienteId, antecedentes, enfermedadesActuales, medicamentosActuales, cirugias } = req.body;
-
-    // Verificar si ya existe
-    const existe = await HistoriaClinica.findOne({ pacienteId });
-    if (existe) {
-      return res.status(400).json({ msg: "Este paciente ya tiene historia clínica." });
-    }
-
-    const nuevaHistoria = new HistoriaClinica({
-      pacienteId,
-      antecedentes,
-      enfermedadesActuales,
-      medicamentosActuales,
-      cirugias
-    });
-
+    const nuevaHistoria = new HistoriaClinica(req.body);
     await nuevaHistoria.save();
-    res.status(201).json({ msg: "Historia clínica creada", historia: nuevaHistoria });
+    res.status(201).json(nuevaHistoria);
+  } catch (error) { res.status(500).json({ msg: "Error al crear" }); }
+};
+
+// 4. AGREGAR EVOLUCIÓN (CORREGIDO)
+export const agregarEvolucion = async (req, res) => {
+  try {
+    const { id } = req.params; // ID del Paciente
+    const { nota } = req.body;
+
+    // 2. BUSCAR DATOS DEL MÉDICO EN LA BD
+    // Usamos el ID que viene del token (req.usuario.id)
+    const medicoData = await Medico.findById(req.usuario.id);
+    
+    // Si encontramos al médico, usamos su nombre. Si no, ponemos un genérico.
+    const nombreMedico = medicoData 
+      ? `Dr. ${medicoData.nombre} ${medicoData.apellido}` 
+      : "Dr. Desconocido";
+
+    const historia = await HistoriaClinica.findOne({ pacienteId: id });
+    if (!historia) return res.status(404).json({ msg: "Historia no encontrada" });
+
+    // Push al array de evoluciones
+    historia.evoluciones.push({ 
+      nota, 
+      medico: nombreMedico, // Ahora sí guarda el nombre real
+      fecha: new Date() 
+    });
+    
+    await historia.save();
+
+    res.json({ msg: "Evolución agregada", historia });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: "Error al crear historia" });
+    res.status(500).json({ msg: "Error al guardar nota" });
+  }
+};
+
+// 5. Editar Datos Clínicos
+export const actualizarDatosClinicos = async (req, res) => {
+  try {
+    const { id } = req.params; // ID del Paciente
+    const { antecedentes, alergias, enfermedadesActuales, medicamentosActuales } = req.body;
+
+    const historia = await HistoriaClinica.findOneAndUpdate(
+      { pacienteId: id },
+      { antecedentes, alergias, enfermedadesActuales, medicamentosActuales },
+      { new: true }
+    );
+
+    res.json({ msg: "Datos actualizados", historia });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al actualizar" });
   }
 };

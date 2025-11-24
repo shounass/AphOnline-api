@@ -20,106 +20,87 @@
   padding: 30px;
   text-align: center;
 }
-
 .citas-header h1 { margin: 0; font-size: 2rem; color: white; }
 .citas-header p { color: #a7d9d0; margin-top: 5px; }
 
-/* --- PESTAÑAS --- */
-.tabs-header {
-  display: flex;
-  border-bottom: 1px solid #eee;
-}
+/* Pestañas */
+.tabs-header { display: flex; border-bottom: 1px solid #eee; }
+.tab-btn { flex: 1; padding: 20px; border: none; background: #f9f9f9; font-size: 1.1rem; font-weight: 600; cursor: pointer; color: #555; transition: all 0.3s; }
+.tab-btn.active { background: white; color: var(--color-primary); border-bottom: 3px solid var(--color-primary); }
+.tab-btn:hover:not(.active) { background: #eee; }
 
-.tab-btn {
-  flex: 1;
-  padding: 20px;
-  border: none;
-  background: #f9f9f9;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  color: #555;
-  transition: all 0.3s;
-}
+.tab-content { padding: 30px; }
 
-.tab-btn.active {
-  background: white;
-  color: var(--color-primary);
-  border-bottom: 3px solid var(--color-primary);
-}
-
-.tab-btn:hover:not(.active) {
-  background: #eee;
-}
-
-.tab-content {
-  padding: 30px;
-}
-
-/* --- TARJETAS DE CITAS --- */
-.citas-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-}
+/* Grid Citas */
+.citas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 
 .cita-card {
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 20px;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  border: 1px solid #eee; border-radius: 10px; padding: 20px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;
 }
 
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
+.card-top { display: flex; justify-content: space-between; margin-bottom: 15px; }
 .fecha-badge { font-weight: bold; color: var(--color-logo-dark); }
-.hora-badge { color: var(--color-primary); }
+.hora-badge { color: var(--color-primary); font-weight: bold; }
 
-.card-body h4 { margin: 0; color: #333; }
-.card-body .esp { color: #777; font-size: 0.9rem; margin-bottom: 5px; }
-.card-body .motivo { font-style: italic; background: #f4f4f4; padding: 5px; font-size: 0.85rem; }
+.card-body h4 { margin: 0; color: #333; font-size: 1.1rem; }
+.card-body .motivo { font-style: italic; background: #f4f4f4; padding: 8px; font-size: 0.85rem; border-radius: 6px; margin: 10px 0; color: #555; }
 
-.card-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
+/* ALERTAS Y NOTIFICACIONES */
+.alerta { padding: 10px; border-radius: 6px; font-size: 0.9rem; margin-top: 10px; }
+.alerta-pendiente { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+.alerta-exito { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+/* Estilos Específicos para la Propuesta (El botón feo se arregla aquí) */
+.alerta-propuesta {
+  background: #fff8e1;
+  border: 2px solid #f1c40f; /* Borde amarillo fuerte */
+  color: #333;
+  padding: 15px;
+  border-radius: 8px;
 }
 
-.btn-edit, .btn-cancel {
-  flex: 1;
-  padding: 8px;
+.propuesta-titulo {
+  font-weight: bold; color: #d35400; margin-bottom: 5px;
+}
+
+.btn-si {
+  background-color: #27ae60; /* Verde éxito */
+  color: white;
   border: none;
-  border-radius: 5px;
+  padding: 10px 15px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 10px;
+  transition: background 0.3s;
 }
+.btn-si:hover { background-color: #219150; }
 
-.btn-edit { background: #e2e6ea; color: #333; }
-.btn-cancel { background: #f8d7da; color: #721c24; }
 
-/* --- FORMULARIO AGENDAR --- */
+/* Botones Generales */
+.card-actions { margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
+.btn-cancel { width: 100%; padding: 8px; border: 1px solid #f8d7da; background: white; color: #dc3545; border-radius: 5px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+.btn-cancel:hover { background: #f8d7da; }
+
+/* Formulario Agendar */
 .form-agendar { max-width: 600px; margin: 0 auto; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .form-group { margin-bottom: 20px; }
-.form-group label { display: block; font-weight: bold; margin-bottom: 8px; }
+.form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--color-logo-dark); }
 .form-group input, .form-group select, .form-group textarea {
-  width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+  width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; font-family: inherit;
 }
-.btn-submit { width: 100%; padding: 15px; background: var(--color-primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
+.btn-submit { width: 100%; padding: 15px; background: var(--color-primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+.btn-submit:hover { background: #0056b3; }
 
-/* --- TABLA --- */
+/* Mensajes globales del formulario */
+.alert { padding: 15px; margin-bottom: 20px; border-radius: 8px; text-align: center; font-weight: bold; }
+.alert.error { background: #f8d7da; color: #721c24; }
+.alert.success { background: #d4edda; color: #155724; }
+
+/* Tabla Historial */
 .historial-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 .historial-table th, .historial-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
 .badge.cancelada { color: red; background: #ffe6e6; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; }
 .badge.completada { color: green; background: #e6fffa; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; }
-
-/* --- MODAL --- */
-.modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; }
-.modal-box { background:white; padding:30px; border-radius:10px; width:300px; }
-.modal-btns { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
-.btn-save { background:var(--color-primary); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; }

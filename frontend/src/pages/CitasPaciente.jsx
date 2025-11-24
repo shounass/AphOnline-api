@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import "./citasPaciente.css";
@@ -8,8 +8,6 @@ const CitasPaciente = () => {
   const [activeTab, setActiveTab] = useState("mis-citas");
   const [citas, setCitas] = useState([]);
   const [medicos, setMedicos] = useState([]);
-
-  // Estado del formulario
   const [formNueva, setFormNueva] = useState({
     medicoId: "",
     fecha: "",
@@ -17,10 +15,13 @@ const CitasPaciente = () => {
     motivo: "",
     tipo: "Presencial",
   });
-
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
 
-  // --- HORARIOS MAESTROS (Base) ---
+  const [horasLibres, setHorasLibres] = useState([]);
+  const [cargandoHoras, setCargandoHoras] = useState(false);
+  const fechaHoy = new Date().toISOString().split("T")[0];
+
+  // Horas base
   const horasTotales = [
     "08:00",
     "09:00",
@@ -34,13 +35,7 @@ const CitasPaciente = () => {
     "17:00",
   ];
 
-  const [horasLibres, setHorasLibres] = useState([]);
-  const [cargandoHoras, setCargandoHoras] = useState(false);
-
-  const fechaHoy = new Date().toISOString().split("T")[0];
-
-  // 1. Cargar datos iniciales
-  const cargarDatos = async () => {
+  const cargarDatos = useCallback(async () => {
     try {
       const config = { headers: { Authorization: token } };
       const { data: dataCitas } = await api.get("/citas", config);
@@ -50,91 +45,66 @@ const CitasPaciente = () => {
     } catch (error) {
       console.error("Error", error);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     if (token) cargarDatos();
-  }, [token]);
+  }, [token, cargarDatos]);
 
-  // ============================================================
-  // 2. EFECTO INTELIGENTE (FILTRO SÁBADOS + OCUPADOS)
-  // ============================================================
+  // Lógica de disponibilidad
   useEffect(() => {
     const consultarDisponibilidad = async () => {
       if (formNueva.medicoId && formNueva.fecha) {
         setCargandoHoras(true);
         setHorasLibres([]);
-
         try {
           const config = {
             headers: { Authorization: token },
             params: { medicoId: formNueva.medicoId, fecha: formNueva.fecha },
           };
-
-          // Petición al backend (Nos dice qué horas están OCUPADAS)
           const { data } = await api.get("/citas/disponibilidad", config);
 
           if (data.bloqueado) {
-            // Si el médico no trabaja ese día (ej. Domingo)
             setMensaje({ texto: `🚫 ${data.mensaje}`, tipo: "error" });
             setHorasLibres([]);
           } else {
             setMensaje({ texto: "", tipo: "" });
-
-            // --- PASO 1: DEFINIR HORARIO BASE SEGÚN EL DÍA ---
-            const diaSemana = new Date(formNueva.fecha).getUTCDay(); // 6 = Sábado
+            const diaSemana = new Date(formNueva.fecha).getUTCDay();
             let horasDelDia = [...horasTotales];
-
-            // Si es Sábado (6), cortamos a las 12:00
-            if (diaSemana === 6) {
+            if (diaSemana === 6)
               horasDelDia = horasDelDia.filter(
                 (h) => parseInt(h.split(":")[0]) <= 12
               );
-            }
 
-            // --- PASO 2: QUITAR LAS OCUPADAS ---
             const disponibles = horasDelDia.filter(
               (hora) => !data.horasOcupadas.includes(hora)
             );
-
             setHorasLibres(disponibles);
           }
-
-          // Resetear la hora seleccionada si ya no es válida
           setFormNueva((prev) => ({ ...prev, hora: "" }));
         } catch (error) {
-          console.error("Error verificando horario", error);
+          console.error("Error horario", error);
         } finally {
           setCargandoHoras(false);
         }
       }
     };
-
     consultarDisponibilidad();
   }, [formNueva.medicoId, formNueva.fecha, token]);
-  // ============================================================
 
-  // --- ACCIONES ---
   const handleAgendar = async (e) => {
     e.preventDefault();
     setMensaje({ texto: "", tipo: "" });
-
-    if (!formNueva.hora) {
-      setMensaje({
-        texto: "Por favor selecciona una hora válida.",
+    if (!formNueva.hora)
+      return setMensaje({
+        texto: "Selecciona una hora válida.",
         tipo: "error",
       });
-      return;
-    }
 
     try {
       const config = { headers: { Authorization: token } };
       await api.post("/citas", formNueva, config);
-
-      setMensaje({
-        texto: "¡Solicitud enviada! Espera confirmación.",
-        tipo: "success",
-      });
+      setMensaje({ texto: "¡Solicitud enviada!", tipo: "success" });
       setFormNueva({
         medicoId: "",
         fecha: "",
@@ -145,8 +115,10 @@ const CitasPaciente = () => {
       cargarDatos();
       setActiveTab("mis-citas");
     } catch (error) {
-      const msgServidor = error.response?.data?.msg || "Error al agendar.";
-      setMensaje({ texto: msgServidor, tipo: "error" });
+      setMensaje({
+        texto: error.response?.data?.msg || "Error.",
+        tipo: "error",
+      });
     }
   };
 
@@ -163,7 +135,7 @@ const CitasPaciente = () => {
   };
 
   const handleCancelar = async (id) => {
-    if (!window.confirm("¿Seguro que deseas cancelar?")) return;
+    if (!window.confirm("¿Cancelar cita?")) return;
     try {
       const config = { headers: { Authorization: token } };
       await api.put(`/citas/cancelar/${id}`, {}, config);
@@ -174,7 +146,6 @@ const CitasPaciente = () => {
   };
 
   const formatearFecha = (fechaString) => {
-    if (!fechaString) return "--";
     const fecha = new Date(fechaString);
     const fechaUsuario = new Date(
       fecha.valueOf() + fecha.getTimezoneOffset() * 60000
@@ -200,7 +171,6 @@ const CitasPaciente = () => {
           <h1>Gestión de Citas</h1>
           <p>Administra tus consultas médicas.</p>
         </header>
-
         <div className="tabs-header">
           <button
             className={`tab-btn ${activeTab === "mis-citas" ? "active" : ""}`}
@@ -215,7 +185,6 @@ const CitasPaciente = () => {
             ➕ Nueva Cita
           </button>
         </div>
-
         {activeTab === "mis-citas" && (
           <div className="tab-content">
             <section className="citas-section">
@@ -235,37 +204,26 @@ const CitasPaciente = () => {
                         </span>
                         <span className="hora-badge">{cita.hora}</span>
                       </div>
-
                       <div className="card-body">
                         <h4>
                           Dr. {cita.medicoId?.nombre} {cita.medicoId?.apellido}
                         </h4>
                         <p className="motivo">"{cita.motivo}"</p>
-
                         {cita.estado === "Pendiente" && (
                           <div className="alerta alerta-pendiente">
-                            ⏳ Esperando confirmación del médico...
+                            ⏳ Esperando confirmación...
                           </div>
                         )}
-
                         {cita.estado === "Confirmada" && (
                           <div className="alerta alerta-exito">
-                            ✅ <strong>¡Cita Confirmada!</strong>
+                            ✅ <strong>¡Confirmada!</strong>
                           </div>
                         )}
-
                         {cita.estado === "Propuesta" && (
                           <div className="alerta alerta-propuesta">
-                            <div className="propuesta-titulo">
-                              ⚠️ Propuesta de cambio:
-                            </div>
-                            <p>
-                              Nueva fecha:{" "}
-                              <strong>
-                                {formatearFecha(cita.propuesta.fecha)}
-                              </strong>{" "}
-                              a las <strong>{cita.propuesta.hora}</strong>
-                            </p>
+                            ⚠️ <strong>Propuesta:</strong>{" "}
+                            {formatearFecha(cita.propuesta.fecha)} -{" "}
+                            {cita.propuesta.hora}
                             <button
                               onClick={() => handleAceptarPropuesta(cita._id)}
                               className="btn-si"
@@ -275,7 +233,6 @@ const CitasPaciente = () => {
                           </div>
                         )}
                       </div>
-
                       <div className="card-actions">
                         <button
                           onClick={() => handleCancelar(cita._id)}
@@ -289,7 +246,6 @@ const CitasPaciente = () => {
                 </div>
               )}
             </section>
-
             <section className="citas-section">
               <h3>📂 Historial</h3>
               <table className="historial-table">
@@ -317,16 +273,13 @@ const CitasPaciente = () => {
             </section>
           </div>
         )}
-
         {activeTab === "agendar" && (
           <div className="tab-content">
             <form onSubmit={handleAgendar} className="form-agendar">
               <h3>Agendar Nueva Cita</h3>
-
               {mensaje.texto && (
                 <div className={`alert ${mensaje.tipo}`}>{mensaje.texto}</div>
               )}
-
               <div className="form-group">
                 <label>Médico:</label>
                 <select
@@ -336,15 +289,14 @@ const CitasPaciente = () => {
                   }
                   required
                 >
-                  <option value="">-- Seleccione un Doctor --</option>
+                  <option value="">-- Seleccione --</option>
                   {medicos.map((m) => (
                     <option key={m._id} value={m._id}>
-                      Dr. {m.nombre} {m.apellido} ({m.especialidad})
+                      Dr. {m.nombre} {m.apellido}
                     </option>
                   ))}
                 </select>
               </div>
-
               <div className="form-row">
                 <div className="form-group">
                   <label>Fecha:</label>
@@ -358,7 +310,6 @@ const CitasPaciente = () => {
                     required
                   />
                 </div>
-
                 <div className="form-group">
                   <label>Hora:</label>
                   <select
@@ -375,41 +326,32 @@ const CitasPaciente = () => {
                     }
                   >
                     <option value="">
-                      {cargandoHoras
-                        ? "Verificando..."
-                        : !formNueva.fecha
-                        ? "-- Elija fecha primero --"
-                        : "-- Seleccione Hora --"}
+                      {cargandoHoras ? "..." : "-- Hora --"}
                     </option>
-
                     {!cargandoHoras &&
                       horasLibres.map((h) => (
                         <option key={h} value={h}>
                           {h}
                         </option>
                       ))}
-
                     {!cargandoHoras &&
                       formNueva.fecha &&
                       horasLibres.length === 0 && (
-                        <option disabled>🚫 No hay citas disponibles</option>
+                        <option disabled>🚫 Agenda llena</option>
                       )}
                   </select>
                 </div>
               </div>
-
               <div className="form-group">
-                <label>Motivo de consulta:</label>
+                <label>Motivo:</label>
                 <textarea
                   value={formNueva.motivo}
                   onChange={(e) =>
                     setFormNueva({ ...formNueva, motivo: e.target.value })
                   }
                   required
-                  placeholder="Describe brevemente tus síntomas..."
                 ></textarea>
               </div>
-
               <button
                 type="submit"
                 className="btn-submit"

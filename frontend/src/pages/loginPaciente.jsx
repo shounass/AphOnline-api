@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
-import { useAuth } from '../context/AuthContext';
-import './loginPaciente.css'; 
+import { useAuth } from "../context/AuthContext";
+import "./loginPaciente.css";
 
 const Login = () => {
   const { login } = useAuth();
@@ -22,21 +22,17 @@ const Login = () => {
     }
 
     try {
-      // --- LLAMADA AL LOGIN UNIFICADO ---
       const { data } = await api.post("/auth/login", { documento, password });
-      
-      // Guardamos sesión
+
       login(data.usuario, data.token);
-      
-      // --- REDIRECCIÓN INTELIGENTE ---
-      if (data.rol === 'medico') {
-        alert(`Hola Dr. ${data.usuario.apellido}, redirigiendo a su consultorio...`);
+
+      if (data.rol === "admin") {
+        navigate("/dashboard-admin");
+      } else if (data.rol === "medico") {
         navigate("/dashboard-medico");
       } else {
-        // Es paciente
         navigate("/dashboard-paciente");
       }
-
     } catch (error) {
       const msg = error.response?.data?.msg || "Credenciales incorrectas";
       setMensajeError(msg);
@@ -47,37 +43,38 @@ const Login = () => {
     <div className="login-page-wrapper">
       <div className="login-container">
         <h2>Acceso Aphonline</h2>
-        <p style={{textAlign:'center', color:'#666', marginBottom:'20px'}}>
-          Pacientes y Especialistas
+        <p style={{ textAlign: "center", color: "#666", marginBottom: "20px" }}>
+          Plataforma de Gestión Médica
         </p>
 
         <form onSubmit={handleSubmit} className="login-form">
-          
-          {mensajeError && (
-            <div className="error-message">{mensajeError}</div>
-          )}
+          {mensajeError && <div className="error-message">{mensajeError}</div>}
 
           <div className="form-group">
-            <label htmlFor="documento">Documento de Identidad:</label>
-            <input 
+            <label htmlFor="documento">Usuario:</label>
+            <input
               id="documento"
-              type="text" 
-              placeholder="Ingresa tu cédula" 
-              required 
+              type="text"
+              // Placeholder claro para guiar al usuario
+              placeholder="Tu documento"
+              required
               value={documento}
-              onChange={(e) => setDocumento(e.target.value)} 
+              onChange={(e) => setDocumento(e.target.value)}
             />
+            <small style={{ color: "#888", fontSize: "0.8rem" }}>
+              * Médicos y Admins usar correo institucional.
+            </small>
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="password">Contraseña:</label>
-            <input 
+            <input
               id="password"
-              type="password" 
-              placeholder="Tu contraseña" 
-              required 
+              type="password"
+              placeholder="Tu contraseña"
+              required
               value={password}
-              onChange={(e) => setPassword(e.target.value)} 
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -86,7 +83,8 @@ const Login = () => {
           </button>
 
           <p className="register-link">
-            ¿Eres nuevo? <Link to="/registro-paciente">Regístrate aquí</Link>
+            ¿Eres paciente nuevo?{" "}
+            <Link to="/registro-paciente">Regístrate aquí</Link>
           </p>
         </form>
       </div>

@@ -1,44 +1,178 @@
-.medico-wrapper {
-  background-color: #f0f2f5;
+.medico-dash-wrapper {
+  background-color: #f4f6f8;
   min-height: 90vh;
   padding: 40px 20px;
 }
 
-.medico-header {
-  text-align: center;
-  margin-bottom: 40px;
-  color: #2c3e50;
+/* --- Header --- */
+.medico-dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
 }
 
-.medico-grid {
+.header-intro h1 { margin: 0; color: #2c3e50; font-size: 2rem; }
+.header-intro p { margin: 5px 0 0 0; color: #7f8c8d; }
+.header-date { font-weight: bold; color: #3498db; text-transform: capitalize; font-size: 1.1rem; }
+
+/* --- Stats Cards --- */
+.stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  max-width: 1000px;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
-.medico-card {
+.stat-card-medico {
   background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  text-align: center;
-  border-top: 5px solid #3498db;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-.medico-card h3 { margin-top: 0; color: #333; }
-.empty-msg { color: #777; font-style: italic; margin: 20px 0; }
+.stat-card-medico::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+.stat-card-medico.blue::before { background: #3498db; }
+.stat-card-medico.orange::before { background: #e67e22; }
+.stat-card-medico.green::before { background: #27ae60; }
+.stat-card-medico.purple::before { background: #9b59b6; }
 
-.btn-action {
+.stat-card-medico .icon {
+  font-size: 2.5rem; background: #f9f9f9; width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center; border-radius: 50%;
+}
+
+.stat-card-medico h3 { margin: 0; font-size: 2rem; color: #333; }
+.stat-card-medico p { margin: 0; color: #777; font-size: 0.9rem; }
+.stat-link { position: absolute; right: 20px; top: 20px; text-decoration: none; color: #e67e22; font-weight: bold; font-size: 0.85rem; }
+
+/* --- Main Grid --- */
+.dashboard-medico-main { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+
+/* --- Agenda del Día --- */
+.section-today { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.section-title h2 { margin: 0; font-size: 1.3rem; color: #2c3e50; }
+
+.btn-ver-agenda {
+  color: #3498db; text-decoration: none; font-weight: bold; font-size: 0.9rem;
+  border: 1px solid #3498db; padding: 5px 15px; border-radius: 20px; transition: all 0.3s;
+}
+.btn-ver-agenda:hover { background: #3498db; color: white; }
+
+.empty-today { text-align: center; padding: 40px; color: #999; }
+.today-list { display: flex; flex-direction: column; gap: 15px; }
+
+.today-card {
+  display: flex; align-items: center; background: #fdfdfd; border: 1px solid #eee;
+  padding: 15px; border-radius: 8px; transition: transform 0.2s;
+}
+.today-card:hover { transform: translateX(5px); border-color: #3498db; }
+
+.today-card .time-box {
+  font-weight: bold; color: #2c3e50; font-size: 1.1rem; padding-right: 15px;
+  border-right: 1px solid #eee; min-width: 60px; text-align: center;
+}
+.today-card .patient-box { flex-grow: 1; padding-left: 15px; }
+.patient-box h4 { margin: 0; font-size: 1rem; color: #333; }
+.patient-box .reason { font-size: 0.85rem; color: #666; font-style: italic; }
+
+.today-card .status-box { margin-right: 15px; }
+.badge-med { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+.badge-med.pendiente { background: #fff3cd; color: #856404; }
+.badge-med.confirmada { background: #d4edda; color: #155724; }
+.badge-med.completada { background: #d1ecf1; color: #0c5460; }
+
+.btn-go { background: #f0f2f5; color: #333; text-decoration: none; padding: 5px 10px; border-radius: 50%; font-weight: bold; }
+.btn-go:hover { background: #3498db; color: white; }
+
+/* --- Accesos Rápidos --- */
+.section-shortcuts h3 { margin-top: 0; color: #2c3e50; margin-bottom: 15px; }
+.shortcut-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+
+.shortcut-btn {
+  display: flex; align-items: center; gap: 15px; background: white; border: none;
+  padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  text-decoration: none; color: #333; font-weight: bold; transition: transform 0.2s;
+  cursor: pointer; text-align: left; font-size: 1rem; width: 100%;
+}
+.shortcut-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.s-icon { font-size: 1.5rem; }
+
+.tips-box { margin-top: 30px; background: #fff8e1; padding: 15px; border-radius: 8px; border-left: 4px solid #f1c40f; font-size: 0.9rem; }
+.tips-box h4 { margin: 0 0 5px 0; color: #d35400; }
+.tips-box p { margin: 0; color: #555; }
+
+/* --- MODALES --- */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+  z-index: 2000; backdrop-filter: blur(3px);
+}
+.modal-content {
+  background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2); border-top: 5px solid #3498db;
+}
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.btn-cancel { background: #ecf0f1; color: #333; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+.btn-save { background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; color: #333; }
+.form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; box-sizing: border-box; }
+
+/* --- SELECCIÓN DE DÍAS (MODAL) - ¡AQUÍ ESTABA LO QUE FALTABA! --- */
+.dias-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.dia-check {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  user-select: none;
+  background-color: #f9f9f9;
+  color: #555;
+  transition: all 0.2s ease;
   display: inline-block;
-  margin-top: 15px;
-  padding: 10px 20px;
+}
+
+.dia-check:hover {
+  background-color: #eef2f7;
+  border-color: #b0c4de;
+}
+
+/* Cuando el día está seleccionado */
+.dia-check.active {
   background-color: #3498db;
   color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background 0.3s;
+  border-color: #3498db;
+  box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
 }
-.btn-action:hover { background-color: #2980b9; }
+
+/* Estadísticas (Barras) */
+.stats-bars-container { margin: 20px 0; display: flex; flex-direction: column; gap: 15px; }
+.stat-row { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+.stat-row span { width: 80px; font-weight: bold; color: #555; }
+.bar-bg { flex-grow: 1; height: 10px; background-color: #eee; border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 5px; transition: width 1s ease; }
+.bar-fill.success { background-color: #27ae60; }
+.bar-fill.warning { background-color: #f39c12; }
+.bar-fill.danger { background-color: #e74c3c; }
+.total-summary { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; font-size: 0.95rem; color: #2c3e50; }
+
+@media (max-width: 900px) {
+  .dashboard-medico-main { grid-template-columns: 1fr; }
+}

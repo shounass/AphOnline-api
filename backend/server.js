@@ -12,6 +12,7 @@ import historiasClinicasRoutes from "./src/routes/historiasClinicasRoutes.js";
 import recetasRoutes from "./src/routes/recetasRoutes.js";
 import examenRoutes from "./src/routes/examenRoutes.js";
 import authRoutes from "./src/routes/authRoutes.js";
+import adminRoutes from "./src/routes/adminRoutes.js";
 
 // --- Configuración Inicial ---
 dotenv.config();
@@ -63,6 +64,7 @@ app.use("/api/citas", citasRoutes);
 app.use("/api/historias", historiasClinicasRoutes);
 app.use("/api/recetas", recetasRoutes);
 app.use("/api/examenes", examenRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Ruta raíz de prueba
 app.get("/", (req, res) => {

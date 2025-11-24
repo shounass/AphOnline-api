@@ -7,7 +7,6 @@ import './dashboardPaciente.css';
 const DashboardPaciente = () => {
   const { token } = useAuth();
   
-  // --- ESTADOS PARA DATOS REALES ---
   const [perfil, setPerfil] = useState(null);
   const [citas, setCitas] = useState([]);
   const [recetas, setRecetas] = useState([]);
@@ -19,7 +18,6 @@ const DashboardPaciente = () => {
       try {
         const config = { headers: { Authorization: token } };
 
-        // Usamos Promise.all para cargar todo en paralelo (es más rápido)
         const [resPerfil, resCitas, resRecetas] = await Promise.all([
           api.get('/pacientes/perfil', config),
           api.get('/citas', config),
@@ -28,20 +26,16 @@ const DashboardPaciente = () => {
 
         setPerfil(resPerfil.data);
         
-        // Filtramos citas
+        // Filtramos citas pendientes
         const todasLasCitas = resCitas.data;
-        setCitas(todasLasCitas.filter(c => c.estado === 'Pendiente'));
+        setCitas(todasLasCitas.filter(c => c.estado === 'Pendiente' || c.estado === 'Confirmada' || c.estado === 'Propuesta'));
 
-        // Recetas
         setRecetas(resRecetas.data);
 
-        // Intentamos cargar la historia (puede fallar si es nuevo y no tiene)
         try {
           const resHistoria = await api.get('/historias', config);
-          // Tomamos las últimas 3 citas del historial
           setHistorial(resHistoria.data.historiaCitas.slice(0, 3));
         } catch (err) {
-          console.log("El paciente aún no tiene historia clínica creada.");
           setHistorial([]);
         }
 
@@ -55,13 +49,15 @@ const DashboardPaciente = () => {
     if (token) cargarTodo();
   }, [token]);
 
-  // --- UTILS ---
-  const formatearFecha = (fecha) => new Date(fecha).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' });
+  // --- FIX DE ZONA HORARIA ---
+  const formatearFecha = (fechaString) => {
+    if (!fechaString) return "";
+    const fecha = new Date(fechaString);
+    const fechaUsuario = new Date(fecha.valueOf() + fecha.getTimezoneOffset() * 60000);
+    return fechaUsuario.toLocaleDateString('es-CO', { day: 'numeric', month: 'short' });
+  };
   
-  // Calculamos recetas activas
   const recetasActivas = recetas.filter(r => r.estado === 'Activa').length;
-
-  // Obtenemos la próxima cita (la primera de la lista pendiente)
   const proximaCita = citas.length > 0 ? citas[0] : null;
 
   if (cargando) return <div className="dashboard-loading">Cargando tu información...</div>;
@@ -69,7 +65,6 @@ const DashboardPaciente = () => {
   return (
     <div className="dashboard-wrapper">
       
-      {/* --- HEADER CON PERFIL REAL --- */}
       <div className="welcome-banner">
         <div className="welcome-info">
           <img 
@@ -97,36 +92,37 @@ const DashboardPaciente = () => {
 
       <div className="dashboard-overview-grid">
 
-        {/* --- COLUMNA 1: PRÓXIMA CITA --- */}
+        {/* COLUMNA 1: PRÓXIMA CITA */}
         <section className="panel-section">
           <div className="section-header">
             <h2>📅 Tu Próxima Cita</h2>
-            <Link to="/agendar-cita" className="btn-mini">+ Agendar</Link>
+            <Link to="/citas" className="btn-mini">+ Ver Todas</Link>
           </div>
           
           <div className="section-body">
             {proximaCita ? (
               <div className="next-appointment-card">
                 <div className="date-big">
-                  <span>{new Date(proximaCita.fecha).getDate()}</span>
-                  <small>{new Date(proximaCita.fecha).toLocaleDateString('es-CO', {month:'short'}).toUpperCase()}</small>
+                  <span>{new Date(proximaCita.fecha).getUTCDate()}</span>
+                  <small>{new Date(proximaCita.fecha).toLocaleString('es-CO', {month:'short', timeZone:'UTC'}).toUpperCase()}</small>
                 </div>
                 <div className="info-big">
                   <h3>Dr. {proximaCita.medicoId?.nombre} {proximaCita.medicoId?.apellido}</h3>
                   <p className="esp">{proximaCita.medicoId?.especialidad}</p>
                   <p className="hora">⏰ {proximaCita.hora} • {proximaCita.tipo}</p>
+                  <span className={`badge ${proximaCita.estado.toLowerCase()}`}>{proximaCita.estado}</span>
                 </div>
               </div>
             ) : (
               <div className="empty-state">
                 <p>No tienes citas programadas.</p>
-                <Link to="/agendar-cita" className="btn btn-outline">Agendar Ahora</Link>
+                <Link to="/citas" className="btn btn-outline">Agendar Ahora</Link>
               </div>
             )}
           </div>
         </section>
 
-        {/* --- COLUMNA 2: ÚLTIMAS RECETAS --- */}
+        {/* COLUMNA 2: RECETAS */}
         <section className="panel-section">
           <div className="section-header">
             <h2>💊 Últimas Recetas</h2>
@@ -137,11 +133,10 @@ const DashboardPaciente = () => {
               <p className="text-muted">No hay recetas registradas.</p>
             ) : (
               <div className="list-container">
-                {recetas.slice(0, 2).map(receta => ( // Solo mostramos las 2 últimas
+                {recetas.slice(0, 2).map(receta => (
                   <div key={receta._id} className="list-item receta-item">
                     <div className="icon-box">💊</div>
                     <div className="info-box">
-                      {/* Mostramos el primer medicamento de la receta */}
                       <h4>{receta.medicamentos[0]?.nombre}</h4>
                       <p>{receta.medicamentos[0]?.dosis}</p>
                       <small>Dr. {receta.medicoId?.nombre}</small>
@@ -153,7 +148,7 @@ const DashboardPaciente = () => {
           </div>
         </section>
 
-        {/* --- COLUMNA 3 (Abajo): HISTORIAL RECIENTE --- */}
+        {/* COLUMNA 3: HISTORIAL */}
         <section className="panel-section full-width">
           <div className="section-header">
             <h2>📋 Historial Reciente</h2>

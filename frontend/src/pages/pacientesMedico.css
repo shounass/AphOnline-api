@@ -1,0 +1,143 @@
+/* --- Estilos Generales (Ya tenías) --- */
+.pacientes-wrapper { background-color: #f0f2f5; min-height: 90vh; padding: 40px 20px; }
+.pacientes-header { text-align: center; margin-bottom: 30px; color: #2c3e50; }
+.search-container { max-width: 600px; margin: 0 auto 40px; text-align: center; }
+.search-box { display: flex; gap: 10px; background: white; padding: 5px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.search-box input { border: none; flex: 1; padding: 15px 20px; font-size: 1.1rem; outline: none; border-radius: 50px; }
+.search-box button { background: #3498db; color: white; border: none; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; }
+.error-alert { margin-top: 15px; background: #fadbd8; color: #c0392b; padding: 10px; border-radius: 8px; }
+
+/* Tarjeta Resultado */
+.paciente-result-card { background: white; max-width: 900px; margin: 0 auto; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: flex; overflow: hidden; border: 1px solid #eee; }
+.paciente-avatar-col { width: 200px; background: #eaf2f8; display: flex; align-items: center; justify-content: center; border-right: 1px solid #eee; }
+.paciente-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid white; }
+.paciente-info-col { flex: 1; padding: 30px; }
+.tags-row { display: flex; gap: 10px; margin-bottom: 20px; }
+.tag { background: #f0f2f5; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; color: #555; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #555; }
+.paciente-actions { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+.btn-action { padding: 12px 25px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; background: #2c3e50; color: white; font-size: 1rem; }
+.btn-action:hover { background: #1a252f; }
+
+/* --- MODAL HISTORIA CLÍNICA --- */
+.hc-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(3px); }
+.hc-modal-content { background: white; width: 95%; max-width: 800px; height: 85vh; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+
+.hc-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; border-radius: 12px 12px 0 0; }
+.hc-header h3 { margin: 0; color: #2c3e50; }
+.btn-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #777; }
+
+.hc-tabs { display: flex; border-bottom: 1px solid #ddd; background: #f1f1f1; }
+.hc-tab { flex: 1; padding: 15px; border: none; background: none; font-weight: bold; color: #555; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent; }
+.hc-tab.active { background: white; color: #3498db; border-bottom-color: #3498db; }
+
+.hc-body { padding: 30px; overflow-y: auto; flex: 1; background: white; }
+
+/* Contenido Pestañas */
+.info-block { margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #ccc; }
+.info-block.alert { background: #fff5f5; border-left-color: #e74c3c; color: #c0392b; }
+.info-block strong { display: block; margin-bottom: 5px; color: #333; }
+
+/* Evoluciones */
+.new-note-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #ccc; }
+.new-note-form textarea { padding: 15px; border: 1px solid #ddd; border-radius: 8px; min-height: 100px; font-family: inherit; }
+.btn-add-note { align-self: flex-end; background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+.notes-list { display: flex; flex-direction: column; gap: 15px; }
+.note-item { background: #f0f8ff; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db; }
+.note-meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: #777; margin-bottom: 8px; font-weight: bold; }
+.note-text { margin: 0; color: #333; white-space: pre-wrap; }
+
+/* Editar */
+.edit-form .form-group { margin-bottom: 15px; }
+.edit-form label { display: block; font-weight: bold; margin-bottom: 5px; }
+.edit-form textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; min-height: 80px; box-sizing: border-box; }
+.btn-save-changes { width: 100%; background: #3498db; color: white; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+.order-form-container {
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.order-form-container h4 {
+  margin-top: 0;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Fila de 2 columnas (Tipo y Nombre) */
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* El nombre ocupa más espacio */
+  gap: 15px;
+}
+
+/* Inputs y Selects específicos de este form */
+.order-form select,
+.order-form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: white;
+  transition: border-color 0.3s;
+}
+
+.order-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  min-height: 80px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.order-form input:focus,
+.order-form select:focus,
+.order-form textarea:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+}
+
+/* Botón de Generar */
+.btn-generate {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  align-self: flex-end; /* Alinear a la derecha */
+  transition: background 0.3s;
+}
+
+.btn-generate:hover {
+  background-color: #1a252f;
+  transform: translateY(-2px);
+}
+
+/* Responsividad para el form */
+@media (max-width: 600px) {
+  .form-row-2 {
+    grid-template-columns: 1fr; /* Una columna en móvil */
+  }
+}

@@ -93,3 +93,16 @@
   .examen-row { flex-direction: column; align-items: flex-start; }
   .examen-status { align-items: flex-start; width: 100%; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; flex-direction: row; justify-content: space-between; }
 }
+
+/* Estilos específicos para los botones */
+.btn-ver.orden {
+  background-color: #3498db; /* Azul claro para la orden */
+  color: white;
+}
+.btn-ver.orden:hover { background-color: #2980b9; }
+
+.btn-ver.resultado {
+  background-color: #27ae60; /* Verde para el resultado listo */
+  color: white;
+}
+.btn-ver.resultado:hover { background-color: #219150; }

@@ -34,6 +34,7 @@ const AgendaMedico = () => {
     "17:00",
   ];
 
+  // Usamos useCallback para estabilizar la función
   const cargarAgenda = useCallback(async () => {
     try {
       const config = { headers: { Authorization: token } };
@@ -128,19 +129,15 @@ const AgendaMedico = () => {
       month: "long",
     });
 
-  // --- LÓGICA PARA FILTRAR HORAS EN LA PROPUESTA ---
   const getHorasDisponiblesPropuesta = () => {
     if (!formPropuesta.fecha) return [];
-
     const fechaObj = new Date(formPropuesta.fecha);
-    // Ajuste de zona horaria para obtener el día correcto
     const diaSemana = new Date(
       fechaObj.valueOf() + fechaObj.getTimezoneOffset() * 60000
     ).getUTCDay();
-
-    if (diaSemana === 0) return []; // Domingo no hay horas
-    if (diaSemana === 6) return horasTotales.filter((h) => parseInt(h) <= 12); // Sábado solo hasta las 12
-    return horasTotales; // Lunes a Viernes
+    if (diaSemana === 0) return [];
+    if (diaSemana === 6) return horasTotales.filter((h) => parseInt(h) <= 12);
+    return horasTotales;
   };
 
   return (
@@ -170,7 +167,7 @@ const AgendaMedico = () => {
           </h2>
 
           {cargando ? (
-            <p>Cargando...</p>
+            <p style={{ textAlign: "center", padding: "20px" }}>Cargando...</p>
           ) : citasDelDia.length === 0 ? (
             <div className="empty-day">
               <p>No hay citas para este día.</p>
@@ -191,7 +188,6 @@ const AgendaMedico = () => {
                     </h3>
                     <p className="doc-id">CC: {cita.pacienteId?.documento}</p>
                     <p className="motivo">"{cita.motivo}"</p>
-
                     <button
                       className="btn-ver-paciente"
                       onClick={() => setPacienteVer(cita.pacienteId)}
@@ -199,7 +195,6 @@ const AgendaMedico = () => {
                       👁️ Ver Ficha
                     </button>
                   </div>
-
                   <div className="cita-actions">
                     {cita.estado === "Pendiente" && (
                       <>
@@ -238,7 +233,6 @@ const AgendaMedico = () => {
         </section>
       </div>
 
-      {/* --- MODAL PROPUESTA (ACTUALIZADO) --- */}
       {modalPropuesta && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -249,7 +243,7 @@ const AgendaMedico = () => {
                 <input
                   type="date"
                   required
-                  min={new Date().toISOString().split("T")[0]} // No permitir pasado
+                  min={new Date().toISOString().split("T")[0]}
                   onChange={(e) =>
                     setFormPropuesta({
                       ...formPropuesta,
@@ -259,7 +253,6 @@ const AgendaMedico = () => {
                   }
                 />
               </div>
-
               <div className="form-group">
                 <label>Nueva Hora:</label>
                 <select
@@ -283,12 +276,10 @@ const AgendaMedico = () => {
                   )}
                 </select>
               </div>
-
               <div className="form-group">
                 <label>Motivo / Razón:</label>
                 <textarea
                   required
-                  placeholder="Ej: Tengo una cirugía urgente..."
                   onChange={(e) =>
                     setFormPropuesta({
                       ...formPropuesta,
@@ -306,7 +297,7 @@ const AgendaMedico = () => {
                   Cancelar
                 </button>
                 <button type="submit" className="btn-save">
-                  Enviar Propuesta
+                  Enviar
                 </button>
               </div>
             </form>
@@ -314,7 +305,6 @@ const AgendaMedico = () => {
         </div>
       )}
 
-      {/* --- MODAL VER FICHA PACIENTE --- */}
       {pacienteVer && (
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: "650px" }}>
@@ -353,7 +343,6 @@ const AgendaMedico = () => {
                 {pacienteVer.eps} • Estrato {pacienteVer.estrato}
               </span>
             </div>
-
             <div
               style={{
                 display: "grid",
@@ -400,7 +389,6 @@ const AgendaMedico = () => {
                 <strong>📍 Dirección:</strong> {pacienteVer.direccion}
               </div>
             </div>
-
             <div
               style={{
                 marginTop: "20px",
@@ -432,7 +420,6 @@ const AgendaMedico = () => {
                 </p>
               </div>
             </div>
-
             <div className="modal-actions">
               <button onClick={() => setPacienteVer(null)} className="btn-save">
                 Cerrar Ficha
